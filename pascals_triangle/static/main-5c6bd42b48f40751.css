@@ -1,0 +1,35 @@
+html {
+  font-family: monospace;
+  text-align: center;
+}
+
+body {
+  margin: 0px;
+}
+
+#rows {
+  text-align: center;
+  width: 80%;
+  border: 1px solid black;
+  padding: 5px;
+}
+
+table {
+  margin: auto;
+}
+
+table.highlight {
+  border: 1px solid blue;
+  background-color: #FFFF6B;
+}
+
+td {
+  border: 2px solid black;
+  width: 80px;
+  height: 80px;
+  font-size: 24px;
+}
+
+tr {
+  width: auto;
+}
