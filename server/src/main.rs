@@ -8,6 +8,7 @@ async fn index() -> impl Responder {
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {
+    println!("Serving static files on port 8080");
     HttpServer::new(|| {
         App::new()
             .service(index)
