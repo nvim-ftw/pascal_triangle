@@ -1,6 +1,11 @@
 use yew::html::Html;
 use yew::html;
 use std::fmt;
+use std::collections::HashMap;
+
+pub enum Error {
+    RowDoesNotExist(usize),
+}
 
 struct Cell {
     number: u128,
@@ -60,10 +65,10 @@ pub struct Model {
 
 impl Model {
     pub fn new() -> Self {
-        let rows = vec!(Row {width: 1, cells: vec!(Cell {number: 1}), highlight: true},);
+        let rows = vec!(Row {width: 1, cells: vec!(Cell {number: 1}), highlight: false},);
         Self { 
             rows: rows,
-            highlighted_row: Some(0),
+            highlighted_row: None,
         }
     }
     pub fn generate_rows(&mut self, count: u32) {
@@ -95,9 +100,38 @@ impl Model {
         }
     }
     pub fn to_html(&self) -> Html {
-    html! { 
-        { for self.rows.iter().map(|row| row.to_html() )}
+        html! { 
+            { for self.rows.iter().map(|row| row.to_html() )}
+        }
     }
+    pub fn set_highlighted_row(&mut self, row_index: usize) -> Result<bool, Error> {
+        if row_index >= self.rows.len() { return Err(Error::RowDoesNotExist(row_index)); }
+        match self.highlighted_row {
+            Some(r) => {
+                if row_index == r { return Ok(false); }
+                self.rows[r].highlight = false;
+                self.rows[row_index].highlight = true;
+                self.highlighted_row = Some(row_index);
+                return Ok(true);
+            },
+            None => {
+                self.rows[row_index].highlight = true;
+                self.highlighted_row = Some(row_index);
+                return Ok(true);
+            },
+        }
+    }
+    pub fn highlighted_row(&self) -> Option<usize> {
+        self.highlighted_row
+    }
+    pub fn remove_highlight(&mut self) {
+        match self.highlighted_row {
+            None => (),
+            Some(i) => {
+                self.rows[i].highlight = false;
+                self.highlighted_row = None;
+            },
+        }
     }
 }
 
