@@ -18,6 +18,31 @@ struct Row {
     highlight: bool,
 }
 
+impl Row {
+    // returns a table with one row and all the cells
+    fn to_html(&self) -> Html {
+        if self.highlight {
+            html! {<>
+                <table class={"highlight"}><tr>
+                    { for self.cells.iter().map(|cell| html! {
+                        <td>{ format!("{}", cell) }</td>
+                    })}
+                </tr></table>
+            </>}
+        }
+        else {
+            html! {<>
+                <table><tr>
+                    { for self.cells.iter().map(|cell| html! {
+                        <td>{ format!("{}", cell) }</td>
+                    })}
+                </tr></table>
+            </>}
+        }
+    }
+}
+
+// formats Row as the numbers in each of its cells, delimited by spaces 
 impl fmt::Display for Row {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         let mut result = String::new();
@@ -70,27 +95,9 @@ impl Model {
         }
     }
     pub fn to_html(&self) -> Html {
-        let mut rows_html: Vec<Html> = Vec::new();
-        for row in self.rows.iter() {
-            if row.highlight {
-                let row_html = html! {<>
-                    <table><tr>{ for row.cells.iter().map(|cell| html! {
-                        <td>{ format!("{}", cell) }</td>
-                    })}</tr></table>
-                </>};
-                rows_html.push(row_html);
-            }
-            else {
-                let row_html = html! {<>
-                    <table class={"highlight"}><tr>{ for row.cells.iter().map(|cell| html! {
-                        <td>{ format!("{}", cell) }</td>
-                    })}</tr></table>
-                </>};
-                rows_html.push(row_html);
-            }
-        }
-
-    html! { {for rows_html } }
+    html! { 
+        { for self.rows.iter().map(|row| row.to_html() )}
+    }
     }
 }
 
