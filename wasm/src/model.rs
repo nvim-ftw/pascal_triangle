@@ -1,7 +1,6 @@
 use yew::html::Html;
 use yew::html;
 use std::fmt;
-use std::collections::HashMap;
 
 pub enum Error {
     RowDoesNotExist(usize),

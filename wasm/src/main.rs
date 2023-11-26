@@ -4,11 +4,6 @@ use yew::prelude::*;
 mod num_input;
 use crate::num_input::NumInput;
 
-pub enum TrackedValueType {
-    I64(i64),
-    Str(String),
-}
-
 pub enum Msg {
     AddRow,
     UpdateHighlightedRow(String),
