@@ -19,7 +19,6 @@ table {
 }
 
 table.highlight {
-  border: 1px solid blue;
   background-color: #FFFF6B;
 }
 td {
