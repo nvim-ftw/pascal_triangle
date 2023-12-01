@@ -60,17 +60,19 @@ impl fmt::Display for Row {
 pub struct Model {
     rows: Vec<Row>,
     highlighted_row: Option<usize>,
+    pub held_field_value: String,
 }
 
 impl Model {
     pub fn new() -> Self {
         let rows = vec!(Row {width: 1, cells: vec!(Cell {number: 1}), highlight: false},);
-        Self { 
+        Self {
             rows: rows,
             highlighted_row: None,
+            held_field_value: String::new(),
         }
     }
-    pub fn generate_rows(&mut self, count: u32) {
+    pub fn generate_rows(&mut self, count: usize) {
         for _ in 0..count {
             let current_row_number = self.rows.len() - 1;
             let current_row = &self.rows[current_row_number];
@@ -83,10 +85,10 @@ impl Model {
                     new_cells.push(Cell {number: 1});
                     continue;
                 }
-                let value = current_row
-                                .cells[i as usize - 1].number +
-                            current_row
-                                .cells[i as usize].number;
+                let value = current_row;
+                let value = value.cells[i as usize - 1].number +
+                    current_row
+                        .cells[i as usize].number;
                 new_cells.push(Cell { number: value });
             }
             let new_row: Row;
@@ -97,6 +99,12 @@ impl Model {
             };
             self.rows.push(new_row);
         }
+    }
+    pub fn generate_to_row(&mut self, row_number: usize) -> bool {
+        let current_row_count = self.rows.len();
+        if row_number <= current_row_count - 1 { return false }
+        self.generate_rows(row_number - current_row_count);
+        true
     }
     pub fn to_html(&self) -> Html {
         html! { 

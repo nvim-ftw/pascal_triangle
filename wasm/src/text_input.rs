@@ -16,7 +16,7 @@ fn get_value_from_input_event(e: InputEvent) -> String {
 }
 
 /// Controlled Text Input Component
-#[function_component(NumInput)]
+#[function_component(TextInput)]
 pub fn num_input(props: &Props) -> Html {
     let Props { value, on_change } = props.clone();
 
@@ -25,6 +25,6 @@ pub fn num_input(props: &Props) -> Html {
     });
 
     html! {
-        <input type="number" {value} {oninput} />
+        <input type="text" {value} {oninput} />
     }
 }
